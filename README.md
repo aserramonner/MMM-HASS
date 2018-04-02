@@ -1,5 +1,7 @@
 # MMM-HASS
-HomeAssistant module for the MagicMirror
+HomeAssistant module for the MagicMirror. Shows sensor readings from HomeAssistant: 
+
+![ScreenShot](/MMM-HASS.png)
 
 ## Dependencies
 - An installation of [MagicMirror<sup>2</sup>](https://github.com/MichMich/MagicMirror)
