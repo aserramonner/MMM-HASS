@@ -1,0 +1,63 @@
+.MMM-HASS .row {
+  position: relative;
+  padding: 1px;
+  min-width: 300px;
+  justify-content: left;
+  line-height: 20px;
+  text-align: right;
+}
+
+.MMM-HASS .module-content .flex-item {
+  /*margin: auto;*/
+}
+
+.region.left .MMM-HASS .row,
+.region.center .MMM-HASS .row,
+.region.right .MMM-HASS .row {
+  position: relative;
+  padding: 1px;
+  justify-content: left;
+}
+
+.region.left .MMM-HASS .row .flex-item > div,
+.region.center .MMM-HASS .row .flex-item > div,
+.region.right .MMM-HASS .row .flex-item > div {
+  display: inline-block;
+  min-width: 70px;
+}
+
+.MMM-HASS .device {
+/*  display: block; */
+  font-size: 20px;
+  white-space: nowrap;
+  margin-right: 40px;
+  line-height: 25px;
+  position: absolute;
+  left: 0px;
+}
+
+.region.left .MMM-HASS .flex-item .title,
+.region.center .MMM-HASS .flex-item .title,
+.region.right .MMM-HASS .flex-item .title{
+  border-bottom: none;
+}
+
+.MMM-HASS .value {
+  font-size: 20px;
+  display: inline-block;
+  margin-right: 5px;
+  line-height: 25px;
+}
+
+.region.left .MMM-HASS .flex-item .value,
+.region.center .MMM-HASS .flex-item .value,
+.region.right .MMM-HASS .flex-item .value{
+  margin: 5px;
+  font-size: 1em;
+}
+
+.MMM-HASS .value i {
+  margin-right: 8px;
+  font-size: 0.75em;
+
+}

@@ -1,0 +1,26 @@
+{
+  "name": "MMM-HASS",
+  "version": "0.0.1",
+  "description": "HomeAssistant module for the MagicMirror",
+  "main": "MMM-HASS.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aserramonner/MMM-HASS.git"
+  },
+  "keywords": [
+    "magic",
+    "mirror",
+    "module",
+    "home-assistant"
+  ],
+  "author": "Albert Serra",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/aserramonner/MMM-HASS/issues"
+  },
+  "homepage": "https://github.com/aserramonner/MMM-HASS#readme",
+  "dependencies": {
+    "request": "latest",
+    "underscore": "latest"
+    }
+}
