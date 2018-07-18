@@ -19,9 +19,14 @@ module.exports = NodeHelper.create({
   },
 
   buildHassUrl: function (devicename, config) {
-
-    var url = config.host + ':' + config.port +
-              '/api/states/' + devicename;
+    
+    var url = config.host;
+    
+    if (config.port) {
+      url = url + ':' + config.port;
+    }
+      
+    url = url + '/api/states/' + devicename;
 
     //console.log(url);
 
@@ -34,8 +39,13 @@ module.exports = NodeHelper.create({
 
   buildHassEventUrl: function (domain, service, config) {
 
-    var url = config.host + ':' + config.port +
-              '/api/services/' + domain + '/' + service;
+    var url = config.host;
+    
+    if (config.port) {
+      url = url + ':' + config.port;
+    }
+      
+    url = url + '/api/services/' + domain + '/' + service;
 
     console.log(url);
 
