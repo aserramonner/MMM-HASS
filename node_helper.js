@@ -143,7 +143,9 @@ module.exports = NodeHelper.create({
       var outDevice = {};
       var responses = [];
 
-      //console.log('Request: ' + device);
+      if(config.debuglogging) {
+        console.log(device);
+      }
 
       var readings = device.deviceReadings;
       var urls = [];
@@ -170,8 +172,8 @@ module.exports = NodeHelper.create({
         }, function(error, response, body) {
           completed_requests++;
           if(config.debuglogging) {
-            console.log('Error: ' + error);
-            console.log('Body: ' + body);
+            console.log(error);
+            console.log(body);
           }
           responses.push(body);
           if (completed_requests == urls.length) {
