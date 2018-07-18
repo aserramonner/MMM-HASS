@@ -135,7 +135,7 @@ module.exports = NodeHelper.create({
       var outDevice = {};
       var responses = [];
       
-      console.log(device);
+      //console.log('Request: ' + device);
 
       var readings = device.deviceReadings;
       var urls = [];
@@ -144,7 +144,7 @@ module.exports = NodeHelper.create({
       //
       readings.forEach(function(element, index, array) {
           var url = self.buildHassUrl(element.sensor, config);
-          console.log(url);
+          console.log('Request URL: ' + url);
           urls.push(url);
       });
  
@@ -161,7 +161,8 @@ module.exports = NodeHelper.create({
           json: true,
         }, function(error, response, body) {
              completed_requests++;
-             //console.log(body);
+             console.log('Error: ' + error);
+	           console.log('Body: ' + body);
              responses.push(body);
              if (completed_requests == urls.length) {
                 // All requests done for the device, process responses array
