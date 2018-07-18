@@ -27,6 +27,10 @@ module.exports = NodeHelper.create({
     }
       
     url = url + '/api/states/' + devicename;
+	  
+    if (config.apipassword) {
+      url = url + '?api_password=' + config.apipassword;
+    }
 
     //console.log(url);
 
@@ -46,6 +50,10 @@ module.exports = NodeHelper.create({
     }
       
     url = url + '/api/services/' + domain + '/' + service;
+
+    if (config.apipassword) {
+      url = url + '?api_password=' + config.apipassword;
+    }
 
     console.log(url);
 
