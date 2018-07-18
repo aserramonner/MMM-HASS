@@ -32,7 +32,9 @@ module.exports = NodeHelper.create({
       url = url + '?api_password=' + config.apipassword;
     }
 
-    //console.log(url);
+    if(config.debuglogging) {
+      console.log(url);
+    }
 
     if (config.https) {
       return 'https://' + url;
@@ -55,7 +57,9 @@ module.exports = NodeHelper.create({
       url = url + '?api_password=' + config.apipassword;
     }
 
-    console.log(url);
+    if(config.debuglogging) {
+      console.log(url);
+    }
 
     if (config.https) {
       return 'https://' + url;
@@ -95,7 +99,9 @@ module.exports = NodeHelper.create({
   parseJson: function(index, json) {
     var self = this;
 
-    //console.log(json.attributes);
+    if(config.debuglogging) {
+      console.log(json.attributes);
+    }
 
     var device = {};
     // save value of property 'sensor' an array
@@ -122,7 +128,9 @@ module.exports = NodeHelper.create({
     };
 
     var post_req = request(post_options, function(error, response, body) {
-      console.log('Response: ' + response.statusCode);
+      if(config.debuglogging) {
+        console.log('Response: ' + response.statusCode);
+      }
     });
   },
 
@@ -161,8 +169,10 @@ module.exports = NodeHelper.create({
           json: true,
         }, function(error, response, body) {
           completed_requests++;
-          console.log('Error: ' + error);
-          console.log('Body: ' + body);
+          if(config.debuglogging) {
+            console.log('Error: ' + error);
+            console.log('Body: ' + body);
+          }
           responses.push(body);
           if (completed_requests == urls.length) {
             // All requests done for the device, process responses array
