@@ -18,12 +18,23 @@ module.exports = NodeHelper.create({
     this.config = {};
   },
 
-  buildHassUrl: function (devicename, config) {
+  buildHassUrl: function(devicename, config) {
 
-    var url = config.host + ':' + config.port +
-              '/api/states/' + devicename;
+    var url = config.host;
 
-    //console.log(url);
+    if (config.port) {
+      url = url + ':' + config.port;
+    }
+
+    url = url + '/api/states/' + devicename;
+
+    if (config.apipassword) {
+      url = url + '?api_password=' + config.apipassword;
+    }
+
+    if(config.debuglogging) {
+      console.log(url);
+    }
 
     if (config.https) {
       return 'https://' + url;
@@ -32,12 +43,23 @@ module.exports = NodeHelper.create({
     }
   },
 
-  buildHassEventUrl: function (domain, service, config) {
+  buildHassEventUrl: function(domain, service, config) {
 
-    var url = config.host + ':' + config.port +
-              '/api/services/' + domain + '/' + service;
+    var url = config.host;
 
-    console.log(url);
+    if (config.port) {
+      url = url + ':' + config.port;
+    }
+
+    url = url + '/api/services/' + domain + '/' + service;
+
+    if (config.apipassword) {
+      url = url + '?api_password=' + config.apipassword;
+    }
+
+    if(config.debuglogging) {
+      console.log(url);
+    }
 
     if (config.https) {
       return 'https://' + url;
@@ -51,7 +73,7 @@ module.exports = NodeHelper.create({
    * @param  {object} device fhem device object
    * @return {string}
    */
-  getDeviceName: function (attributes) {
+  getDeviceName: function(attributes) {
     if (attributes.friendly_name) {
       return attributes.friendly_name;
     } else {
@@ -59,7 +81,7 @@ module.exports = NodeHelper.create({
     }
   },
 
-  getReadingsValue: function (readingsName, attributes) {
+  getReadingsValue: function(readingsName, attributes) {
     var values = [];
 
     readingsName.forEach(function(element, index, array) {
@@ -74,25 +96,27 @@ module.exports = NodeHelper.create({
     return values;
   },
 
-  parseJson: function (index, json) {
+  parseJson: function(index, json) {
     var self = this;
 
-    //console.log(json.attributes);
+    if(config.debuglogging) {
+      console.log(json.attributes);
+    }
 
     var device = {};
     // save value of property 'sensor' an array
     var readings = _.pluck(self.config.devices[index].deviceReadings, function(element, index, list) {
-       return  
+      return
     });
 
     //console.log(readingsName);
-    device.name   = config.devices[index].deviceLabel;
+    device.name = config.devices[index].deviceLabel;
     device.values = readings;
 
     return device;
   },
 
-  sendHassEvent: function (config, domain, service, params) {
+  sendHassEvent: function(config, domain, service, params) {
     var self = this;
 
     var urlstr = self.buildHassEventUrl(domain, service, config);
@@ -100,15 +124,17 @@ module.exports = NodeHelper.create({
     var post_options = {
       url: urlstr,
       method: 'POST',
-      json: params 
+      json: params
     };
 
     var post_req = request(post_options, function(error, response, body) {
+      if(config.debuglogging) {
         console.log('Response: ' + response.statusCode);
+      }
     });
   },
 
-  getHassReadings: function (config, callback) {
+  getHassReadings: function(config, callback) {
     var self = this;
 
     //console.log(config.devices);
@@ -116,8 +142,10 @@ module.exports = NodeHelper.create({
     var structuredData = _.each(config.devices, function(device) {
       var outDevice = {};
       var responses = [];
-      
-      console.log(device);
+
+      if(config.debuglogging) {
+        console.log(device);
+      }
 
       var readings = device.deviceReadings;
       var urls = [];
@@ -125,11 +153,11 @@ module.exports = NodeHelper.create({
       // First, build a list of url for all the readings
       //
       readings.forEach(function(element, index, array) {
-          var url = self.buildHassUrl(element.sensor, config);
-          console.log(url);
-          urls.push(url);
+        var url = self.buildHassUrl(element.sensor, config);
+        console.log('Request URL: ' + url);
+        urls.push(url);
       });
- 
+
       //console.log(urls);
 
       var completed_requests = 0;
@@ -142,19 +170,22 @@ module.exports = NodeHelper.create({
           url: urls[i],
           json: true,
         }, function(error, response, body) {
-             completed_requests++;
-             //console.log(body);
-             responses.push(body);
-             if (completed_requests == urls.length) {
-                // All requests done for the device, process responses array
-                // to retrieve all the states
-                outDevice.name   = device.deviceLabel;
-                outDevice.values = _.pluck(responses, "state");
-                callback(outDevice);
-             }
+          completed_requests++;
+          if(config.debuglogging) {
+            console.log(error);
+            console.log(body);
+          }
+          responses.push(body);
+          if (completed_requests == urls.length) {
+            // All requests done for the device, process responses array
+            // to retrieve all the states
+            outDevice.name = device.deviceLabel;
+            outDevice.values = _.pluck(responses, "state");
+            callback(outDevice);
+          }
         });
       }
-    });  
+    });
   },
 
   // Subclass socketNotificationReceived received.
@@ -169,15 +200,20 @@ module.exports = NodeHelper.create({
         completed_devices++;
         structuredData.push(device);
         if (completed_devices == self.config.devices.length) {
-            self.sendSocketNotification('DATARECEIVED', structuredData);
+          self.sendSocketNotification('DATARECEIVED', structuredData);
         }
       });
     } else if (notification === 'HASS_1') {
-        var self = this;
-	this.sendHassEvent(this.config, 'media_player', 'select_source', { 'entity_id':'media_player.menjador', 'source':'Tria asm' });
+      var self = this;
+      this.sendHassEvent(this.config, 'media_player', 'select_source', {
+        'entity_id': 'media_player.menjador',
+        'source': 'Tria asm'
+      });
     } else if (notification === 'HASS_2') {
-        var self = this;
-	this.sendHassEvent(this.config, 'switch', 'turn_on', { 'entity_id':'switch.cuina' } );
+      var self = this;
+      this.sendHassEvent(this.config, 'switch', 'turn_on', {
+        'entity_id': 'switch.cuina'
+      });
     }
   }
 
