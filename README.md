@@ -34,7 +34,8 @@ To use this module, add it to the modules array in the `config/config.js` file:
         position: "top_left",
         config: {
                 host: "your_home_assistant_ip",
-                port: "you_home_assistant_port",
+                port: "your_home_assistant_port",
+                apipassword: "your_home_assistant_api_password",
                 https: false,
                 devices: [
                 { deviceLabel: "Exterior",
