@@ -35,8 +35,7 @@ Module.register('MMM-HASS', {
   // Module notifications from node_helper
   socketNotificationReceived: function(notification, payload) {
     if (notification === 'DATARECEIVED') {
-      this.devices = payload;
-      //Log.log(payload);
+      this.hassData = payload;
       this.loaded = true;
       this.updateDom(2000);
     }
@@ -46,7 +45,7 @@ Module.register('MMM-HASS', {
   start: function() {
     Log.info('Starting module: ' + this.name);
     this.loaded = false;
-    this.devices = [];
+    this.hassData = [];
     this.getData();
     var self = this;
     setInterval(function() {
@@ -83,67 +82,67 @@ Module.register('MMM-HASS', {
 
   // Update the information on screen
   getDom: function() {
-    var self = this;
-    var devices = this.devices;
+    var self      = this;
     var container = document.createElement('div');
 
     if (!this.loaded) {
       var loading = document.createElement('div');
       loading.className = 'device';
-      loading.innerHTML = 'Loading ...';
+      loading.innerHTML = this.translate("LOADING");
       container.appendChild(loading);
     } else {
 
-      devices.forEach(function(element, index, array) {
-        var device = element;
+      for(var index = 0, numDevices = self.config.devices.length; index<numDevices; index++) {
+        var device   = self.config.devices[index];
+        var hassData = this.hassData[device.deviceLabel];
 
         var deviceWrapper = document.createElement('div');
         deviceWrapper.className = 'row';
 
         // add device alias/name
         var titleWrapper = document.createElement('span');
-        titleWrapper.innerHTML = device.name;
+        titleWrapper.innerHTML = device.deviceLabel;
         titleWrapper.className = 'device';
         deviceWrapper.appendChild(titleWrapper);
 
-        // add readings
-        device.values.forEach(function(elementValue, indexValue, arrayValue) {
+        // add readings but do not rely on order from requests
+        for(var indexValue=0, numReadings=device.deviceReadings.length; indexValue<numReadings; indexValue++) {
 
-          var value = elementValue;
+		  var value = hassData[self.config.devices[index].deviceReadings[indexValue].sensor];
 
-          if (typeof elementValue == "number") {
-            value = parseFloat(elementValue)
-              .toFixed(1);
-          }
+		  if (typeof value == "number") {
+		    value = parseFloat(value)
+		      .toFixed(1);
+		  }
 
-          var valueWrapper = document.createElement('span');
+		  var valueWrapper = document.createElement('span');
 
-          //add icon
-          if (self.config.devices[index].deviceReadings[indexValue].icon) {
-            valueWrapper.innerHTML = '<i class="dimmed ' + self.config.devices[index].deviceReadings[indexValue].icon + '"></i>';
-          }
+		  //add icon
+		  if (self.config.devices[index].deviceReadings[indexValue].icon) {
+		    valueWrapper.innerHTML = '<i class="dimmed ' + self.config.devices[index].deviceReadings[indexValue].icon + '"></i>';
+		  }
 
-          valueWrapper.innerHTML += value;
+		  valueWrapper.innerHTML += value;
 
-          // add suffix
-          if (self.config.devices[index].deviceReadings[indexValue].suffix) {
-            valueWrapper.innerHTML += self.config.devices[index].deviceReadings[indexValue].suffix;
-          }
+		  // add suffix
+		  if (self.config.devices[index].deviceReadings[indexValue].suffix) {
+		    valueWrapper.innerHTML += self.config.devices[index].deviceReadings[indexValue].suffix;
+		  }
 
-          if (self.config.devices[index].deviceReadings[indexValue].notification) {
-            self.sendNotification(self.config.devices[index].deviceReadings[indexValue].notification, elementValue);
-          }
+		  if (self.config.devices[index].deviceReadings[indexValue].notification) {
+		    self.sendNotification(self.config.devices[index].deviceReadings[indexValue].notification, value);
+		  }
 
-          valueWrapper.className = 'value medium bright';
-          deviceWrapper.appendChild(valueWrapper);
-        });
+		  valueWrapper.className = 'value medium bright';
+		  deviceWrapper.appendChild(valueWrapper);
+		}
 
-        container.appendChild(deviceWrapper);
-      });
+		container.appendChild(deviceWrapper);
+	      }
 
-    }
+	    }
 
-    return container;
-  }
+	    return container;
+	  }
 
-});
+	});

@@ -141,7 +141,6 @@ module.exports = NodeHelper.create({
 
     var structuredData = _.each(config.devices, function(device) {
       var outDevice = {};
-      var responses = [];
 
       if(config.debuglogging) {
         console.log(device);
@@ -175,12 +174,12 @@ module.exports = NodeHelper.create({
             console.log(error);
             console.log(body);
           }
-          responses.push(body);
+          outDevice[body.entity_id] = body.state;
           if (completed_requests == urls.length) {
             // All requests done for the device, process responses array
             // to retrieve all the states
-            outDevice.name = device.deviceLabel;
-            outDevice.values = _.pluck(responses, "state");
+            outDevice.label = device.deviceLabel;
+            console.log(outDevice);
             callback(outDevice);
           }
         });
@@ -193,12 +192,11 @@ module.exports = NodeHelper.create({
     if (notification === 'GETDATA') {
       var self = this;
       self.config = payload;
-      var structuredData = [];
+      var structuredData = {};
       var completed_devices = 0;
       this.getHassReadings(this.config, function(device) {
-        //console.log(device);
         completed_devices++;
-        structuredData.push(device);
+        structuredData[device.label] = device;
         if (completed_devices == self.config.devices.length) {
           self.sendSocketNotification('DATARECEIVED', structuredData);
         }
