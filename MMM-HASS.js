@@ -16,6 +16,7 @@ Module.register('MMM-HASS', {
     port: '8083',
     initialLoadDelay: 1000,
     updateInterval: 60 * 1000, // every 60 seconds
+    hassiotoken: false, // True: OAuth bearer token for API is in environment variable HASSIO_TOKEN (useful when running as a hassio add-on)
   },
 
   // Define required scripts.
