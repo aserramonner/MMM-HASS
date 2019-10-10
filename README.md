@@ -42,7 +42,7 @@ To use this module, add it to the modules array in the `config/config.js` file:
                 devices: [
                 { deviceLabel: "Exterior",
                         deviceReadings: [
-                        { sensor: "sensor.netatmo_outdoor_temperature", icon: "wi wi-thermometer", suffix: "°"},
+                        { sensor: "sensor.netatmo_outdoor_temperature", icon: "wi wi-thermometer", prefix: "", suffix: "°"},
                         { sensor: "sensor.netatmo_outdoor_humidity", icon: "wi wi-humidity", suffix: "%"},
                         { sensor: "sensor.netatmo_outdoor_battery", icon: "fa fa-battery-full", suffix: ""}
                         ]
