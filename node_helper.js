@@ -127,7 +127,7 @@ module.exports = NodeHelper.create({
       json: params
     };
     if(config.hassiotoken) {
-      post_options.headers = { 'Authorization' : 'Bearer ' + process.env.HASSIO_TOKEN };
+      post_options.headers = { 'Authorization' : 'Bearer ' + config.token };
     }
 
     var post_req = request(post_options, function(error, response, body) {
@@ -173,7 +173,7 @@ module.exports = NodeHelper.create({
           json: true
         };
         if(config.hassiotoken) {
-          get_options.headers = { 'Authorization' : 'Bearer ' + process.env.HASSIO_TOKEN };
+          get_options.headers = { 'Authorization' : 'Bearer ' + config.token };
         }
         request(get_options, function(error, response, body) {
           completed_requests++;

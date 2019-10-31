@@ -36,12 +36,13 @@ To use this module, add it to the modules array in the `config/config.js` file:
                 host: "your_home_assistant_ip",
                 port: "your_home_assistant_port",
                 apipassword: "your_home_assistant_api_password",
+                token: "your_home_assistant_long-lived_access_token",
                 hassiotoken: false,
                 https: false,
                 devices: [
                 { deviceLabel: "Exterior",
                         deviceReadings: [
-                        { sensor: "sensor.netatmo_outdoor_temperature", icon: "wi wi-thermometer", suffix: "°"},
+                        { sensor: "sensor.netatmo_outdoor_temperature", icon: "wi wi-thermometer", prefix: "", suffix: "°"},
                         { sensor: "sensor.netatmo_outdoor_humidity", icon: "wi wi-humidity", suffix: "%"},
                         { sensor: "sensor.netatmo_outdoor_battery", icon: "fa fa-battery-full", suffix: ""}
                         ]

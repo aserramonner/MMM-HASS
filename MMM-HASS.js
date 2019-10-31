@@ -123,6 +123,11 @@ Module.register('MMM-HASS', {
 		    valueWrapper.innerHTML = '<i class="dimmed ' + self.config.devices[index].deviceReadings[indexValue].icon + '"></i>';
 		  }
 
+		  // add prefix
+		  if (self.config.devices[index].deviceReadings[indexValue].prefix) {
+		    valueWrapper.innerHTML += self.config.devices[index].deviceReadings[indexValue].prefix;
+		  }
+
 		  valueWrapper.innerHTML += value;
 
 		  // add suffix
